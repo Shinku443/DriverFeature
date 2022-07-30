@@ -1,4 +1,4 @@
-package com.example.driverfeature
+package com.example.driverapp
 
 import org.junit.Test
 
