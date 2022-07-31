@@ -33,7 +33,7 @@ class DriverViewModel @Inject constructor(
             val result = driverRepo.getListOfDrivers()
             when (result) {
                 is Result.Success -> {
-                    val entries = result.data!!.mapIndexed { index, driverListItem ->
+                    val entries = result.data?.mapIndexed { index, driverListItem ->
                         DriverListItem(
                             driverListItem.details,
                             driverListItem.firstName,
@@ -43,13 +43,15 @@ class DriverViewModel @Inject constructor(
                     }
                     isLoading.value = false
                     loadError.value = ""
-                    driverList.value += entries
-                    driverList.value = driverList.value.sortedBy {
-                        it.lastName
+                    if (entries != null) { //could've also put ?: for a blank list but then we'd have to implement handling that
+                        // entries/result should never be a success with blank data anyway
+                        driverList.value += entries
+                        driverList.value = driverList.value.sortedBy {
+                            it.lastName
+                        }
                     }
                 }
-
-                is Result.Error -> loadError.value = result.message!!
+                is Result.Error -> loadError.value = result.message ?: "Unknown error"
             }
         }
     }
