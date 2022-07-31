@@ -18,7 +18,7 @@ import javax.inject.Inject
 class LoginScreenViewModel @Inject constructor(
     private val loginRepo: LoginRepository
 ) : ViewModel() {
-    var defaultUser = LoggedInUser(-1, "unknown", "unknown", "unknown")
+    private var defaultUser = LoggedInUser(-1, "unknown", "unknown", "unknown")
     var loadError = mutableStateOf("")
     var loggedInUser = mutableStateOf(defaultUser)
 

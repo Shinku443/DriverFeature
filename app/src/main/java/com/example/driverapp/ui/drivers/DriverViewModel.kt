@@ -19,7 +19,7 @@ class DriverViewModel @Inject constructor(
 ) : ViewModel() {
     var driverList =
         mutableStateOf<List<DriverListItem>>(listOf()) //init a mutable list of driverlistitems which will house our data
-    var loadError = mutableStateOf("")//use this to track error
+    private var loadError = mutableStateOf("")//use this to track error
     var isLoading = mutableStateOf(false)
 
     init { //we always want a driver list
@@ -43,10 +43,8 @@ class DriverViewModel @Inject constructor(
                     }
                     isLoading.value = false
                     loadError.value = ""
-                    if (entries != null) { //could've also put ?: for a blank list but then we'd have to implement handling that
-                        // entries/result should never be a success with blank data anyway
-                        driverList.value += entries
-                        driverList.value = driverList.value.sortedBy {
+                    entries?.let {
+                        driverList.value += entries.sortedBy {
                             it.lastName
                         }
                     }

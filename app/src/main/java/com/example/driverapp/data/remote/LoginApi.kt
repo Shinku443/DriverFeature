@@ -9,7 +9,7 @@ import retrofit2.http.*
  */
 interface LoginApi {
     //need these headers
-    // Content-Type:application/json
+    //Content-Type:application/json
     //clientId:"someClientId"
     @Headers(
         "Content-Type:application/json"
