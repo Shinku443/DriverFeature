@@ -1,6 +1,5 @@
 package com.example.driverapp.data.remote
 
-import com.example.driverapp.data.Result
 import com.example.driverapp.data.remote.response.LoggedInUser
 import retrofit2.http.*
 

@@ -21,20 +21,17 @@ import androidx.navigation.NavController
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.example.driverapp.util.Constants
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 
+/**
+ * View for Login Screen
+ */
 @Composable
 fun LoginScreen(
     navController: NavController,
-    viewModel: LoginScreenViewModel = hiltViewModel()
+    viewModel: LoginScreenViewModel = hiltViewModel(),
 ) {
-    //maybe use COIL to grab mastery logo
-
-    val coroutineScope = rememberCoroutineScope()
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     var username by remember { mutableStateOf("") }
@@ -49,13 +46,13 @@ fun LoginScreen(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(Constants.IMG_LOGO_URL)
                 .build(),
-            contentDescription = "logo",
+            contentDescription = "mastery_logo",
             modifier = Modifier
                 //.size(120.dp)
                 .padding(top = 40.dp)
                 .align(CenterHorizontally),
             onError = {
-                Timber.e("failed to load image! : $it.result.throwable.message")
+                Timber.e("Failed to load image! : $it.result.throwable.message")
             }
         )
         Text(
@@ -111,16 +108,10 @@ fun LoginScreen(
                 ),
             onClick = {
                 if (username.isNotEmpty() && password.isNotEmpty()) { //only make api call if we have username/pw
-                    coroutineScope.launch {
-                        withContext(Dispatchers.IO) {
-                            try {
-                                viewModel.login(username, password)
-                                Timber.i("We are logged in with: {$loggedInUser}")
-
-                            } catch (e: Exception) {
-                                Timber.e("loadErr: $loadError with exception:: $e")
-                            }
-                        }
+                    try {
+                        viewModel.login(username, password)
+                    } catch (e: Exception) {
+                        Timber.e("loadErr: $loadError with exception:: $e")
                     }
                 } else {
                     viewModel.loadError.value = "Invalid login"
@@ -132,8 +123,7 @@ fun LoginScreen(
             //check we have a valid id, and username/pw was filled out
             LaunchedEffect(loggedInUser.id) {
                 if (loggedInUser.id != -1) {//&& username.isNotEmpty() && password.isNotEmpty()) {
-                    // basically couldnt use cause loggedinuser.id never changed due to the nature of the response - so when going back,
-                    //we couldnt go back to driver screen caus ethe launchedEffect wouldn't trigger
+
                     navController.navigate("driver_list_screen")
                 }
             }

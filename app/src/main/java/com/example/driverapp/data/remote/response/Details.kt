@@ -5,6 +5,6 @@ data class Details(
     val plateNumber: String,
     val trailerHeight: Int,
     val trailerLength: Int,
-    val trailerType: String,
-    val trailerWidth: Int
+    val trailerWidth: Int,
+    val trailerType: String
 )

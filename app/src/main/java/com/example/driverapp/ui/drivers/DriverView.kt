@@ -1,13 +1,14 @@
 package com.example.driverapp.ui.drivers
 
-import android.graphics.fonts.FontStyle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -15,8 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.Center
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -27,7 +26,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.driverapp.data.remote.response.DriverListItem
 
-//used when listing entire screen of drivers
+/**
+ * View for Drivers
+ */
 @Composable
 fun DriverListScreen(
     navController: NavController,
@@ -35,13 +36,11 @@ fun DriverListScreen(
 ) {
     val driverList by remember { viewModel.driverList }
 
-    viewModel.getDriverList()//we are on this screen so we can call it now
-
     //lazy column that will load all drivers
     LazyColumn(contentPadding = PaddingValues(16.dp)) {//equivalent of RecyclerView
         items(driverList) {
             //Display Item
-            DriverItem(navController, it)
+            DriverItem(navController, it, viewModel)
             Spacer(Modifier.height(16.dp))
         }
     }
@@ -51,47 +50,56 @@ fun DriverListScreen(
 @Composable
 fun DriverItem(
     navController: NavController,
-    driverListItem: DriverListItem
+    driverListItem: DriverListItem,
+    viewModel: DriverViewModel = hiltViewModel()
 ) {
+    val isLoading by remember { viewModel.isLoading }
     Column(
         Modifier
+            .clip(RoundedCornerShape(5.dp))
             .fillMaxSize()
-            .height(120.dp)
+            .height(100.dp)
             .background(Color.LightGray)
             .clickable {
                 navController.navigate(
                     "driver_individual_item_screen/${driverListItem.firstName}/${driverListItem.lastName}"
                 )
-            }
+            },
+        verticalArrangement = Arrangement.Center,
     ) {
-        //We sorted by last name so display last and then first
-        Row(
-            Modifier.padding(start = 20.dp, top = 10.dp)
-        ) {
-            Text(
-                text = "Last Name: ",
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.width(2.dp))
-            Text(
-                text = driverListItem.lastName
-            )
-        }
-        Spacer(Modifier.height(10.dp))
-        Row(
-            Modifier.padding(start = 20.dp)
-        ) {
-            Text(
-                text = "First Name:",
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.width(2.dp))
-            Text(
-                text = driverListItem.firstName
-            )
+        if (isLoading) {
+            CircularProgressIndicator(color = MaterialTheme.colors.primary)
+        } else {
+            //We sorted by last name so display last and then first
+            Row(
+                Modifier
+                    .padding(start = 20.dp)
+            ) {
+                Text(
+                    text = "Last Name: ",
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.width(2.dp))
+                Text(
+                    text = driverListItem.lastName
+                )
+            }
+            Spacer(Modifier.height(10.dp))
+            Row(
+                Modifier
+                    .padding(start = 20.dp)
+            ) {
+                Text(
+                    text = "First Name:",
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.width(2.dp))
+                Text(
+                    text = driverListItem.firstName
+                )
+            }
         }
     }
-
 
 }
 
@@ -122,7 +130,6 @@ fun DriverItemDetails(
     navController: NavController,
     driverListItem: DriverListItem
 ) {
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -133,19 +140,21 @@ fun DriverItemDetails(
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
         )
+
         Column(
             Modifier
                 .padding(
                     top = 60.dp,
                     start = 10.dp,
-                    end = 10.dp
+                    end = 10.dp,
                 )
                 .background(Color.LightGray)
                 .fillMaxWidth()
                 .shadow(5.dp, RoundedCornerShape(10.dp))
                 .clip(
                     RoundedCornerShape(10.dp)
-                ),
+                )
+
         )
         {
             Column(
@@ -222,7 +231,25 @@ fun DriverItemDetails(
                     Spacer(modifier = Modifier.width(2.dp))
                     Text(text = driverListItem.details.plateNumber)
                 }
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(Modifier.height(10.dp))
+                Row {
+                    Text(text = "Current Location: ", fontWeight = FontWeight.Bold)
+                }
+
+                Spacer(Modifier.height(10.dp))
+                Row(Modifier.padding(start = 20.dp)) {
+                    Text(text = "Latitude: ", fontWeight = FontWeight.Bold)
+                    Spacer(modifier = Modifier.width(2.dp))
+                    Text(text = driverListItem.details.currentLocation.latitude)
+                }
+
+                Spacer(Modifier.height(10.dp))
+                Row(Modifier.padding(start = 20.dp)) {
+                    Text(text = "Longitude: ", fontWeight = FontWeight.Bold)
+                    Spacer(modifier = Modifier.width(2.dp))
+                    Text(text = driverListItem.details.currentLocation.longitude)
+                }
+                Spacer(Modifier.height(15.dp)) //Gives us a little bit of room at the bottom so the box isn't cutting off
             }
         }
     }
@@ -244,8 +271,5 @@ fun DriverIndividualItemScreen(
                 driverListItem = values
             )
         }
-
     }
-    //DriverItemDetails(driverListItem =,)
-
 }

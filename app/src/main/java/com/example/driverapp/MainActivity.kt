@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.remember
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,6 +15,9 @@ import com.example.driverapp.ui.login.LoginScreen
 import com.example.driverapp.ui.theme.DriverAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * Main Activity that will kick off jetpack compose & nav routing
+ */
 @AndroidEntryPoint //use this for daggerhilt injection
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +49,6 @@ class MainActivity : AppCompatActivity() {
                         )
                     )
                     {
-
                         val firstName = remember {
                             it.arguments?.getString("firstName")
                         }

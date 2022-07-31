@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 
 /**
- * Simple Repo that will handle login api call
+ * Login Repo that will handle login api call
  */
 @ActivityScoped
 class LoginRepository @Inject constructor(private val loginApi: LoginApi) {

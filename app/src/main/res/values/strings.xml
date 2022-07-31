@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DriverFeature</string>
+    <string name="app_name">DriverApp</string>
     <string name="username_text">Username</string>
     <string name="password_text">Password</string>
     <string name="login_text">Welcome to the Driver List App \n Please Login:</string>

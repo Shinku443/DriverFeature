@@ -9,11 +9,10 @@ import javax.inject.Inject
  * Driver repo that will handle grabbing the driver list
  */
 class DriverRepository @Inject constructor(private val driverApi: DriverApi) {
-
-    suspend fun getListOfDrivers() : Result<List<DriverListItem>>{
-        val response = try{
+    suspend fun getListOfDrivers(): Result<List<DriverListItem>> {
+        val response = try {
             driverApi.getDriverList()
-        }catch (e: Exception){
+        } catch (e: Exception) {
             return Result.Error("Error: $e")
         }
         return Result.Success(response)
