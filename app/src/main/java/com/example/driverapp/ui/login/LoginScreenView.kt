@@ -1,6 +1,7 @@
 package com.example.driverapp.ui.login
 
 import android.widget.Toast
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -44,7 +45,12 @@ fun LoginScreen(
 
         SubcomposeAsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(Constants.IMG_LOGO_URL)
+                .data(
+                    when (isSystemInDarkTheme()) {
+                        true -> Constants.IMG_LOGO_URL_DARK
+                        false -> Constants.IMG_LOGO_URL_LIGHT
+                    }
+                )
                 .build(),
             contentDescription = "mastery_logo",
             modifier = Modifier

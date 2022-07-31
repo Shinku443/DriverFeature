@@ -2,6 +2,7 @@ package com.example.driverapp.ui.drivers
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -20,6 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.DefaultShadowColor
+import androidx.compose.ui.graphics.colorspace.Rgb
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -59,7 +62,12 @@ fun DriverItem(
             .clip(RoundedCornerShape(5.dp))
             .fillMaxSize()
             .height(100.dp)
-            .background(Color.LightGray)
+            .background(
+                when (isSystemInDarkTheme()) {
+                    true -> Color.Black
+                    false -> Color.LightGray
+                }
+            )
             .clickable {
                 navController.navigate(
                     "driver_individual_item_screen/${driverListItem.firstName}/${driverListItem.lastName}"
@@ -148,9 +156,18 @@ fun DriverItemDetails(
                     start = 10.dp,
                     end = 10.dp,
                 )
-                .background(Color.LightGray)
+                .background(
+                    when (isSystemInDarkTheme()) {
+                        true -> Color.Black
+                        false -> Color.LightGray
+                    }
+                )
                 .fillMaxWidth()
-                .shadow(5.dp, RoundedCornerShape(10.dp))
+                .shadow(5.dp, RoundedCornerShape(10.dp),
+                    ambientColor = when (isSystemInDarkTheme()) {
+                        true ->  Color.Red
+                        false -> Color.LightGray
+                    })
                 .clip(
                     RoundedCornerShape(10.dp)
                 )

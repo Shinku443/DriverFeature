@@ -15,6 +15,7 @@ import javax.inject.Inject
 class LoginRepository @Inject constructor(private val loginApi: LoginApi) {
     suspend fun login(username: String, password: String): Result<LoggedInUser> {
         val result = try {
+            System.out.println("logging in from repo")
             loginApi.login(BuildConfig.clientId, username, password)//pass in clientId
         } catch (e: Exception) {
             return Result.Error("An unknown error has occurred: ${e.message}")

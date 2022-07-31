@@ -3,6 +3,8 @@ package com.example.driverapp
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.runtime.remember
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -24,46 +26,49 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             DriverAppTheme {
-                val navController =
-                    rememberNavController() //Have to setup nav controller out here otherwise
-                //rememberNavController will return a different nav controller inside the composable
-                NavHost(
-                    navController = navController,
-                    startDestination = "login_screen"
-                ) {
-                    composable("login_screen") {
-                        LoginScreen(navController = navController)//pass in navcontroller for when we switch screens
-                    }
-                    composable("driver_list_screen") {
-                        DriverListScreen(navController = navController)
-                    }
+                Surface(color = MaterialTheme.colors.background) {
+                    val navController =
+                        rememberNavController() //Have to setup nav controller out here otherwise
+                    //rememberNavController will return a different nav controller inside the composable
+                    NavHost(
+                        navController = navController,
+                        startDestination = "login_screen"
+                    ) {
+                        composable("login_screen") {
+                            LoginScreen(navController = navController)//pass in navcontroller for when we switch screens
+                        }
+                        composable("driver_list_screen") {
+                            DriverListScreen(navController = navController)
+                        }
 
-                    composable("driver_individual_item_screen/{firstName}/{lastName}",
-                        arguments = listOf(
-                            navArgument("firstName") {
-                                type = NavType.StringType
-                            },
-                            navArgument("lastName") {
-                                type = NavType.StringType
+                        composable("driver_individual_item_screen/{firstName}/{lastName}",
+                            arguments = listOf(
+                                navArgument("firstName") {
+                                    type = NavType.StringType
+                                },
+                                navArgument("lastName") {
+                                    type = NavType.StringType
+                                }
+                            )
+                        )
+                        {
+                            val firstName = remember {
+                                it.arguments?.getString("firstName")
                             }
-                        )
-                    )
-                    {
-                        val firstName = remember {
-                            it.arguments?.getString("firstName")
-                        }
 
-                        val lastName = remember {
-                            it.arguments?.getString("lastName")
-                        }
+                            val lastName = remember {
+                                it.arguments?.getString("lastName")
+                            }
 
-                        DriverIndividualItemScreen(
-                            firstName = firstName ?: "",
-                            lastName = lastName ?: "",
-                            navController = navController
-                        )
+                            DriverIndividualItemScreen(
+                                firstName = firstName ?: "",
+                                lastName = lastName ?: "",
+                                navController = navController
+                            )
+                        }
                     }
                 }
+
             }
         }
     }

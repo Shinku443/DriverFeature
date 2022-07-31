@@ -29,11 +29,13 @@ class LoginScreenViewModel @Inject constructor(
             val result = loginRepo.login(username, password)
             when (result) {
                 is Result.Error -> {
+                    println("error! ${result.data}")
                     loadError.value = result.message ?: "Unknown Error"
                 }
                 is Result.Success -> {
                     Timber.i("We are logged in with: {$loggedInUser}")
                     loggedInUser.value = result.data!!
+                    println("We are logged in with: {$loggedInUser}")
                     loadError.value = "" //reset just in case, since we are using this for our toast
                 }
             }
