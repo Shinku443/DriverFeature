@@ -59,6 +59,17 @@ internal class DriverViewModelTest {
     }
 
     @Test
+    fun getNullDriverListOnSuccessfulCall_expectError() = runTest {
+        `when`(mockDriverRepository.getListOfDrivers()).thenReturn(
+            Result.Success(listOf())
+        )
+        setupDataForViewModel()
+        advanceUntilIdle()
+
+        Assert.assertEquals("Error loading driver list", driverViewModel.loadError.value)
+    }
+
+    @Test
     fun getInvalidDriverList_expectNotEquals() = runTest {
         val expectedList = listOf(null)
         `when`(mockDriverRepository.getListOfDrivers()).thenReturn(

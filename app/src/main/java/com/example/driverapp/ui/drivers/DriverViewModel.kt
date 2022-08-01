@@ -42,7 +42,7 @@ class DriverViewModel @Inject constructor(
                         )
                     }
                     isLoading.value = false
-                    if (entries != null) {
+                    if (!entries.isNullOrEmpty()) {
                         loadError.value = ""
                         driverList.value = entries.sortedBy {
                             it.lastName
