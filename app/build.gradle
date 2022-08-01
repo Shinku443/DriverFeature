@@ -23,33 +23,28 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        // defining the build date
-        buildConfigField "long", "BUILD_DATE", System.currentTimeMillis() + "L"
-        // define whether this build is a production build
-        buildConfigField "boolean", "IS_PROD", "false"
-        buildConfigField "String", 'clientId', properties.getProperty('clientId', '"xxx"')
     }
-
 
     buildTypes {
         release {
-            buildConfigField 'boolean', 'IS_PROD', 'true'
+            signingConfig debug.signingConfig
             minifyEnabled false
-            buildConfigField 'int', 'clientId', '1'
+            buildConfigField "String", 'clientId', properties.getProperty('clientIdRelease', '"xxx"')
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
         debug {
             debuggable true
             minifyEnabled false
+            buildConfigField "String", 'clientId', properties.getProperty('clientIdDebug', '"xxx"')
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
         beta {
+            signingConfig debug.signingConfig
             debuggable true
             minifyEnabled false
-            buildConfigField 'boolean', 'IS_PROD', 'false'
+            buildConfigField "String", 'clientId', properties.getProperty('clientIdBeta', '"xxx"')
         }
     }
     compileOptions {
@@ -83,7 +78,6 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    implementation 'com.android.support.constraint:constraint-layout:2.0.4'
 
     //Compose
     implementation "androidx.compose.ui:ui:$compose_version"
