@@ -28,7 +28,7 @@ android {
         buildConfigField "long", "BUILD_DATE", System.currentTimeMillis() + "L"
         // define whether this build is a production build
         buildConfigField "boolean", "IS_PROD", "false"
-        buildConfigField 'int', 'clientId', properties.getProperty('clientId', '"xxx"')
+        buildConfigField "String", 'clientId', properties.getProperty('clientId', '"xxx"')
     }
 
 

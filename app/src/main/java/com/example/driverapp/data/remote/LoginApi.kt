@@ -17,7 +17,7 @@ interface LoginApi {
     @POST("/login")
     @FormUrlEncoded
     suspend fun login(
-        @Header("clientId") clientId: Int?,
+        @Header("clientId") clientId: String?,
         @Field("username") username: String,
         @Field("password") password: String
     ): LoggedInUser

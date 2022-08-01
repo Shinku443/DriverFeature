@@ -24,6 +24,10 @@ import org.mockito.Mockito.mock
 internal class DriverViewModelTest {
     private val mockDriverRepository: DriverRepository = mock(DriverRepository::class.java)
     private lateinit var driverViewModel: DriverViewModel //Because we have the getDriverList call in init we need coroutine
+    private val currentLocation = CurrentLocation("1", "1")
+    private val details = Details(currentLocation, "XXXXXX", 2, 2, 4, "TOW")
+    private val defaultDriver = DriverListItem(details, "Michael", "Stevens", "999-999-0000")
+    private var listOfDrivers: List<DriverListItem> = listOf(defaultDriver)
 
     @ExperimentalCoroutinesApi
     @get:Rule
@@ -32,7 +36,6 @@ internal class DriverViewModelTest {
     @BeforeEach
     fun setup() {
         Dispatchers.setMain(StandardTestDispatcher())
-        driverViewModel = DriverViewModel(mockDriverRepository)
     }
 
     @AfterEach
@@ -40,17 +43,16 @@ internal class DriverViewModelTest {
         Dispatchers.resetMain()
     }
 
+    private fun setupDataForViewModel() {
+        driverViewModel = DriverViewModel(mockDriverRepository)
+    }
+
     @Test
     fun getValidDriverList_expectEquals() = runTest {
-        val currentLocation = CurrentLocation("1", "1")
-        val details = Details(currentLocation, "XXXXXX", 2, 2, 4, "TOW")
-        val defaultDriver = DriverListItem(details, "Michael", "Stevens", "999-999-0000")
-        val listOfDrivers = listOf(defaultDriver)
-
         `when`(mockDriverRepository.getListOfDrivers()).thenReturn(
             Result.Success(listOfDrivers)
         )
-        callPrivateMethodForDriverList()
+        setupDataForViewModel()
         advanceUntilIdle()
 
         Assert.assertEquals(listOfDrivers, driverViewModel.driverList.value)
@@ -58,42 +60,24 @@ internal class DriverViewModelTest {
 
     @Test
     fun getInvalidDriverList_expectNotEquals() = runTest {
-        val currentLocation = CurrentLocation("1", "1")
-        val details = Details(currentLocation, "XXXXXX", 2, 2, 4, "TOW")
-        val defaultDriver = DriverListItem(details, "Michael", "Stevens", "999-999-0000")
-        val listOfDrivers = listOf(defaultDriver)
         val expectedList = listOf(null)
         `when`(mockDriverRepository.getListOfDrivers()).thenReturn(
             Result.Success(listOfDrivers)
         )
-
-        callPrivateMethodForDriverList()
+        setupDataForViewModel()
         advanceUntilIdle()
         Assert.assertNotEquals(expectedList, mockDriverRepository.getListOfDrivers().data)
     }
 
     @Test
     fun getErrorWhenCallingRepo() = runTest {
-        val currentLocation = CurrentLocation("1", "1")
-        val details = Details(currentLocation, "XXXXXX", 2, 2, 4, "TOW")
-        val defaultDriver = DriverListItem(details, "Michael", "Stevens", "999-999-0000")
-        val listOfDrivers = listOf(defaultDriver)
-
         val expectedError = "Error occurred"
         `when`(mockDriverRepository.getListOfDrivers()).thenReturn(
             Result.Error("Error occurred", listOfDrivers)
         )
-        callPrivateMethodForDriverList()
+        setupDataForViewModel()
         advanceUntilIdle()
 
         Assert.assertEquals(expectedError, driverViewModel.loadError.value)
-
-
-    }
-
-    fun callPrivateMethodForDriverList() {
-        val method = driverViewModel.javaClass.getDeclaredMethod("getDriverList")
-        method.isAccessible = true
-        method.invoke(driverViewModel)
     }
 }
