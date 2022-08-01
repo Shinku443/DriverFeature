@@ -19,7 +19,7 @@ class DriverViewModel @Inject constructor(
 ) : ViewModel() {
     var driverList =
         mutableStateOf<List<DriverListItem>>(listOf()) //init a mutable list of driverlistitems which will house our data
-    private var loadError = mutableStateOf("")//use this to track error
+    var loadError = mutableStateOf("")//use this to track error
     var isLoading = mutableStateOf(false)
 
     init { //we always want a driver list
