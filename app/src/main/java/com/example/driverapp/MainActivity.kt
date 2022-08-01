@@ -20,7 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 /**
  * Main Activity that will kick off jetpack compose & nav routing
  */
-@AndroidEntryPoint //use this for daggerhilt injection
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,14 +28,13 @@ class MainActivity : AppCompatActivity() {
             DriverAppTheme {
                 Surface(color = MaterialTheme.colors.background) {
                     val navController =
-                        rememberNavController() //Have to setup nav controller out here otherwise
-                    //rememberNavController will return a different nav controller inside the composable
+                        rememberNavController()
                     NavHost(
                         navController = navController,
                         startDestination = "login_screen"
                     ) {
                         composable("login_screen") {
-                            LoginScreen(navController = navController)//pass in navcontroller for when we switch screens
+                            LoginScreen(navController = navController)
                         }
                         composable("driver_list_screen") {
                             DriverListScreen(navController = navController)

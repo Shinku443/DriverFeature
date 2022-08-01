@@ -21,8 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.DefaultShadowColor
-import androidx.compose.ui.graphics.colorspace.Rgb
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -30,7 +28,7 @@ import androidx.navigation.NavController
 import com.example.driverapp.data.remote.response.DriverListItem
 
 /**
- * View for Drivers
+ * View for Entire list of Drivers
  */
 @Composable
 fun DriverListScreen(
@@ -38,18 +36,17 @@ fun DriverListScreen(
     viewModel: DriverViewModel = hiltViewModel()
 ) {
     val driverList by remember { viewModel.driverList }
-
-    //lazy column that will load all drivers
-    LazyColumn(contentPadding = PaddingValues(16.dp)) {//equivalent of RecyclerView
+    LazyColumn(contentPadding = PaddingValues(16.dp)) {
         items(driverList) {
-            //Display Item
             DriverItem(navController, it, viewModel)
             Spacer(Modifier.height(16.dp))
         }
     }
 }
 
-//Individual Driver Info to display in the list
+/**
+ * Individual Driver Info to display in the list
+ */
 @Composable
 fun DriverItem(
     navController: NavController,
@@ -78,7 +75,6 @@ fun DriverItem(
         if (isLoading) {
             CircularProgressIndicator(color = MaterialTheme.colors.primary)
         } else {
-            //We sorted by last name so display last and then first
             Row(
                 Modifier
                     .padding(start = 20.dp)
@@ -108,7 +104,6 @@ fun DriverItem(
             }
         }
     }
-
 }
 
 
@@ -133,6 +128,10 @@ fun TopBar(
     }
 }
 
+/**
+ * Contains details about individual driver
+ * in their own view
+ */
 @Composable
 fun DriverItemDetails(
     navController: NavController,
@@ -163,11 +162,13 @@ fun DriverItemDetails(
                     }
                 )
                 .fillMaxWidth()
-                .shadow(5.dp, RoundedCornerShape(10.dp),
+                .shadow(
+                    5.dp, RoundedCornerShape(10.dp),
                     ambientColor = when (isSystemInDarkTheme()) {
-                        true ->  Color.Red
+                        true -> Color.Red
                         false -> Color.LightGray
-                    })
+                    }
+                )
                 .clip(
                     RoundedCornerShape(10.dp)
                 )
@@ -191,13 +192,11 @@ fun DriverItemDetails(
                     Text(text = driverListItem.lastName)
                 }
                 Spacer(Modifier.height(10.dp))
-
                 Row {
                     Text(text = "Phone Number: ", fontWeight = FontWeight.Bold)
                     Spacer(modifier = Modifier.width(2.dp))
                     Text(text = driverListItem.phoneNumber)
                 }
-                //pass in details now
                 Spacer(Modifier.height(10.dp))
                 Row {
                     Text(text = "Trailer Type: ", fontWeight = FontWeight.Bold)
@@ -273,7 +272,11 @@ fun DriverItemDetails(
 }
 
 
-//Used when clicking on a driver
+/**
+ * Contains List of Individual Drivers,
+ * and launches new DriverItemDetails based on
+ * name found in list
+ */
 @Composable
 fun DriverIndividualItemScreen(
     firstName: String,

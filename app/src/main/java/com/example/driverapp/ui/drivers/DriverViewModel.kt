@@ -8,26 +8,26 @@ import com.example.driverapp.data.remote.response.DriverListItem
 import com.example.driverapp.data.repository.DriverRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
  * VM of Driver Logic - tracks list from API
  */
-@HiltViewModel//let hilt know this is our vm
+@HiltViewModel
 class DriverViewModel @Inject constructor(
     private val driverRepo: DriverRepository
 ) : ViewModel() {
     var driverList =
-        mutableStateOf<List<DriverListItem>>(listOf()) //init a mutable list of driverlistitems which will house our data
-    var loadError = mutableStateOf("")//use this to track error
+        mutableStateOf<List<DriverListItem>>(listOf())
+    var loadError = mutableStateOf("")
     var isLoading = mutableStateOf(false)
 
-    init { //we always want a driver list
+    init {
         getDriverList()
     }
 
     private fun getDriverList() {
-        //making network call so we want to use coroutine call from vm
         viewModelScope.launch {
             isLoading.value = true
             val result = driverRepo.getListOfDrivers()
@@ -42,11 +42,14 @@ class DriverViewModel @Inject constructor(
                         )
                     }
                     isLoading.value = false
-                    loadError.value = ""
-                    entries?.let {
-                        driverList.value += entries.sortedBy {
+                    if (entries != null) {
+                        loadError.value = ""
+                        driverList.value = entries.sortedBy {
                             it.lastName
                         }
+                    } else {
+                        loadError.value = "Error loading driver list"
+                        Timber.e("Successful api call, error pulling driver list")
                     }
                 }
                 is Result.Error -> loadError.value = result.message ?: "Unknown error"

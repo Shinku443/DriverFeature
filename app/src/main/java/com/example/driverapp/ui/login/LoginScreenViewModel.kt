@@ -18,13 +18,11 @@ import javax.inject.Inject
 class LoginScreenViewModel @Inject constructor(
     private val loginRepo: LoginRepository
 ) : ViewModel() {
-    private var defaultUser = LoggedInUser(-1, "unknown", "unknown", "unknown")
     var loadError = mutableStateOf("")
-    var loggedInUser = mutableStateOf(defaultUser)
+    var loggedInUser = mutableStateOf<LoggedInUser?>(null)
+    var isLoading = mutableStateOf(true)
 
     fun login(username: String, password: String) {
-        loggedInUser.value =
-            defaultUser //any attempt to login resets us to an invalid logged in user
         viewModelScope.launch {
             val result = loginRepo.login(username, password)
             when (result) {
@@ -32,9 +30,15 @@ class LoginScreenViewModel @Inject constructor(
                     loadError.value = result.message ?: "Unknown Error"
                 }
                 is Result.Success -> {
-                    Timber.i("We are logged in with: {$loggedInUser}")
-                    loggedInUser.value = result.data!!
-                    loadError.value = "" //reset just in case, since we are using this for our toast
+                    isLoading.value = false
+                    if (result.data != null) {
+                        loggedInUser.value = result.data
+                        Timber.i("We are logged in with: {${loggedInUser.value}}")
+                    } else {
+                        loadError.value = "Error logging in"
+                        Timber.e("Successful api call, error logging in")
+                    }
+                    loadError.value = ""
                 }
             }
         }

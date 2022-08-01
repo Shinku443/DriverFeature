@@ -8,9 +8,6 @@ import retrofit2.http.*
  * login credentials and retrieves user information.
  */
 interface LoginApi {
-    //need these headers
-    //Content-Type:application/json
-    //clientId:"someClientId"
     @Headers(
         "Content-Type:application/json"
     )

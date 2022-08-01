@@ -13,7 +13,7 @@ class DriveApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree()) //plants a 'tree' for logging
+            Timber.plant(Timber.DebugTree())
         }
     }
 }

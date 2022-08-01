@@ -22,7 +22,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class AppModule {
-    //Provide Login Setup
     @Singleton
     @Provides
     fun provideLoginRepo(
@@ -32,7 +31,6 @@ class AppModule {
     @Singleton
     @Provides
     fun provideLoginApi(): LoginApi {
-        //Was using this just to look at the response/headers
         val logging = HttpLoggingInterceptor()
         logging.setLevel(HttpLoggingInterceptor.Level.BODY)
         val httpClient = OkHttpClient.Builder()
@@ -47,7 +45,6 @@ class AppModule {
     }
 
 
-    //Provides Driver Setup
     @Singleton
     @Provides
     fun provideDriverRepo(

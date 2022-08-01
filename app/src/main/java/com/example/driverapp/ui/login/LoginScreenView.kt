@@ -38,6 +38,7 @@ fun LoginScreen(
     var username by remember { mutableStateOf("") }
     val loadError by remember { viewModel.loadError }
     val loggedInUser by remember { viewModel.loggedInUser }
+    val isLoading by remember { viewModel.isLoading }
 
     Column(
         Modifier.fillMaxSize()
@@ -54,7 +55,6 @@ fun LoginScreen(
                 .build(),
             contentDescription = "mastery_logo",
             modifier = Modifier
-                //.size(120.dp)
                 .padding(top = 40.dp)
                 .align(CenterHorizontally),
             onError = {
@@ -123,16 +123,14 @@ fun LoginScreen(
                     viewModel.loadError.value = "Invalid login"
                 }
             },
-
-            ) {
-            Text(text = "Login")
-            //check we have a valid id, and username/pw was filled out
-            LaunchedEffect(loggedInUser.id) {
-                if (loggedInUser.id != -1) {//&& username.isNotEmpty() && password.isNotEmpty()) {
-
+        ) {
+            LaunchedEffect(isLoading) {
+                if (!isLoading) {
+                    navController.popBackStack()
                     navController.navigate("driver_list_screen")
                 }
             }
+            Text(text = "Login")
             if (loadError.isNotEmpty()) {
                 Timber.e("Load error:: $loadError")
                 Toast.makeText(

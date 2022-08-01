@@ -23,7 +23,7 @@ import org.mockito.Mockito.mock
 @RunWith(JUnit4::class)
 internal class DriverViewModelTest {
     private val mockDriverRepository: DriverRepository = mock(DriverRepository::class.java)
-    private lateinit var driverViewModel: DriverViewModel //Because we have the getDriverList call in init we need coroutine
+    private lateinit var driverViewModel: DriverViewModel
     private val currentLocation = CurrentLocation("1", "1")
     private val details = Details(currentLocation, "XXXXXX", 2, 2, 4, "TOW")
     private val defaultDriver = DriverListItem(details, "Michael", "Stevens", "999-999-0000")
