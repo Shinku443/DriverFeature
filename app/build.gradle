@@ -7,26 +7,6 @@ plugins {
 }
 
 android {
-    signingConfigs {
-        debug {
-            storeFile file('Z:\\Data\\my-release-key.keystore')
-            storePassword 'mastery123'
-            keyPassword 'mastery123'
-            keyAlias 'mastery'
-        }
-        beta {
-            storeFile file('Z:\\Data\\my-release-key.keystore')
-            storePassword 'mastery123'
-            keyAlias 'mastery'
-            keyPassword 'mastery123'
-        }
-        release {
-            storeFile file('Z:\\Data\\my-release-key.keystore')
-            storePassword 'mastery123'
-            keyAlias 'mastery'
-            keyPassword 'mastery123'
-        }
-    }
     compileSdk 32
 
 
@@ -56,7 +36,6 @@ android {
         release {
             buildConfigField 'boolean', 'IS_PROD', 'true'
             minifyEnabled false
-            signingConfig signingConfigs.release
             buildConfigField 'int', 'clientId', '1'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -70,7 +49,6 @@ android {
         beta {
             debuggable true
             minifyEnabled false
-            signingConfig signingConfigs.beta
             buildConfigField 'boolean', 'IS_PROD', 'false'
         }
     }
