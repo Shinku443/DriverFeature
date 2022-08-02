@@ -178,7 +178,7 @@ fun DriverItemDetails(
             Column(
                 modifier = Modifier.padding(start = 20.dp)
             ) {
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(20.dp))
                 Row {
                     Text(text = "First Name: ", fontWeight = FontWeight.Bold)
                     Spacer(modifier = Modifier.width(2.dp))
