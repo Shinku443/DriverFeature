@@ -1,3 +1,16 @@
 <resources>
-    <string name="app_name">DriverFeature</string>
+    <string name="app_name">DriverApp</string>
+    <string name="username_text">Username</string>
+    <string name="password_text">Password</string>
+    <string name="login_text">Welcome to the Driver List App \n Please Login:</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="login">Login</string>
 </resources>
